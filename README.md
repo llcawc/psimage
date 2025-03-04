@@ -2,6 +2,12 @@
 
 gulp plugin for jpg/png/svg image optimization and minify. based on imagemin.
 
+install:
+
+```bash
+npm add -D psimage
+```
+
 sample:
 
 ```js
