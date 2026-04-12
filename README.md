@@ -1,21 +1,35 @@
 # psimage
 
-gulp plugin for optimizing and minimizing jpg/png/gif/svg images and for converting to webp and avif formats. based on imagemin.
+[![GitHub](https://img.shields.io/badge/github-llcawc/psimage-blue)](https://github.com/llcawc/psimage)
 
-The plugin uses various image optimization libraries such as imagemin, imagemin-gifsicle, imagemin-mozjpeg, imagemin-optipng, imagemin-svgo, imagemin-avif, imagemin-webp and supports various image formats such as jpg, jpeg, png, svg and gif. Conversion to webp and avif formats is also supported. The plugin logs the progress and results of the optimization and conversion process, as well as provides statistics on the total number of bytes saved and optimized files.
+Gulp plugin for optimizing and minimizing JPG/PNG/GIF/SVG images, and converting to WebP and AVIF formats. Based on imagemin and sharp.
 
-install:
+The plugin uses various image optimization libraries (imagemin, imagemin-gifsicle, imagemin-mozjpeg, imagemin-optipng, imagemin-svgo) and supports formats such as JPG, JPEG, PNG, SVG, and GIF. Conversion to WebP and AVIF formats is performed using sharp. The plugin logs the progress and results of the optimization and conversion process, and provides statistics on the total number of bytes saved and optimized files.
+
+## Install
 
 ```sh
 npm add -D psimage
 ```
 
-sample:
+or with pnpm:
+
+```sh
+pnpm add -D psimage
+```
+
+or with yarn:
+
+```sh
+yarn add -D psimage
+```
+
+## Usage
 
 ```js
 // import modules
 import { src, dest, series, watch } from "gulp";
-import psimage from "psimage";
+import { psimage } from "psimage";
 
 // Options for image optimization and conversion
 const options = { verbose: true };
@@ -37,36 +51,42 @@ export { images };
 export const dev = series(images, watcher);
 ```
 
-Options for image optimization and conversion:
+## Options
 
-- mozjpegOptions - Options for the "imagemin-mozjpeg" plugin.
-- optipngOptions - Options for the "imagemin-optipng" plugin.
-- svgoOptions - Options for the "imagemin-svgo" plugin.
-- gifsicleOptions - Options for the "imagemin-gifsicle" plugin.
-- avifOptions - Options for the "imagemin-avif" plugin.
-- webpOptions - Options for the "imagemin-webp" plugin.
-- convert - Options for enabling conversion using 'avif' or 'webp' plugins.
-- silent - If true, the final message with the calculation of savings is disabled.
-- verbose - If true, messages are displayed for each file.
+| Option            | Type                         | Default                                                      | Description                                                                     |
+| ----------------- | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| `mozjpegOptions`  | `object`                     | `{ quality: 75, progressive: true }`                         | Options for the `imagemin-mozjpeg` plugin.                                      |
+| `optipngOptions`  | `object`                     | `{ optimizationLevel: 5 }`                                   | Options for the `imagemin-optipng` plugin.                                      |
+| `svgoOptions`     | `object`                     | `{ plugins: [{ name: "preset-default" }, "removeViewBox"] }` | Options for the `imagemin-svgo` plugin.                                         |
+| `gifsicleOptions` | `object`                     | `{ interlaced: true, optimizationLevel: 1, colors: 256 }`    | Options for the `imagemin-gifsicle` plugin.                                     |
+| `avifOptions`     | `AvifOptions`                | `{ quality: 50 }`                                            | AVIF options for the `sharp` plugin.                                            |
+| `webpOptions`     | `WebpOptions`                | `{ quality: 50 }`                                            | WebP options for the `sharp` plugin.                                            |
+| `convert`         | `'none' \| 'avif' \| 'webp'` | `'none'`                                                     | Enable conversion to AVIF or WebP. If `'none'`, only optimization is performed. |
+| `silent`          | `boolean`                    | `false`                                                      | If `true`, the final summary message is disabled.                               |
+| `verbose`         | `boolean`                    | `false`                                                      | If `true`, messages are displayed for each processed file.                      |
+
+### Default options
 
 ```js
-// default options:
 const options = {
-  mozjpegOptions: { quality: 75, progressive: true }
-  optipngOptions: { optimizationLevel: 5 }
-  svgoOptions: { plugins: [{ name: 'preset-default', params: { overrides: { removeViewBox: false } } }], }
-  gifsicleOptions: { interlaced: true, optimizationLevel: 1, colors: 256 }
-  avifOptions: { quality: 50 }
-  webpOptions: { quality: 50 }
-  convert: 'none', // types: 'none' | 'avif' | 'webp' | undefined
-  silent: false,   // types: boolean | undefined
-  verbose: false,  // types: boolean | undefined
-}
+  mozjpegOptions: { quality: 75, progressive: true },
+  optipngOptions: { optimizationLevel: 5 },
+  svgoOptions: { plugins: [{ name: "preset-default" }, "removeViewBox"] },
+  gifsicleOptions: { interlaced: true, optimizationLevel: 1, colors: 256 },
+  avifOptions: { quality: 50 },
+  webpOptions: { quality: 50 },
+  convert: "none", // 'none' | 'avif' | 'webp'
+  silent: false,
+  verbose: false,
+};
 ```
-- Plugins webp for file conversion work with tif, png, jpg, and webp images.
-- Plugins avif for file conversion work with tif, png, jpg, gif, webp and avif images.
-- If the webp or avif plugins is enabled, the files they support are converted without using other plugins.
 
----
+## Notes
 
-MIT License. ©2025 pasmurno by [llcawc](https://github.com/llcawc). Made with <span style="color:red;">❤</span> to beautiful architecture
+- The WebP and AVIF conversion plugins work with TIF, PNG, JPG, GIF, WebP, and AVIF images.
+- If the WebP or AVIF plugin is enabled (`convert: 'webp'` or `convert: 'avif'`), the supported files are converted without using other optimization plugins.
+- SVG files are always optimized with SVGO, regardless of the `convert` setting.
+
+## License
+
+MIT License. Copyright (c) 2021 pasmurno by [llcawc](https://github.com/llcawc). Made with ❤️ to beautiful architecture.

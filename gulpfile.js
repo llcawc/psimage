@@ -3,17 +3,18 @@
 // import modules
 import { deleteAsync } from 'del'
 import { dest, series, src, watch } from 'gulp'
-import psimage from './index.js'
+
+import { psimage } from './dist/psimage.js'
 
 // default options:
 const options = {
   mozjpegOptions: { quality: 75, progressive: true },
   optipngOptions: { optimizationLevel: 5 },
-  svgoOptions: { plugins: [{ name: 'preset-default', params: { overrides: { removeViewBox: false } } }] },
+  svgoOptions: { plugins: [{ name: 'preset-default' }, 'removeViewBox'] },
   gifsicleOptions: { interlaced: true, optimizationLevel: 1, colors: 256 },
   avifOptions: { quality: 50 },
   webpOptions: { quality: 50 },
-  convert: 'avif', // types: 'none' | 'avif' | 'webp' | undefined
+  convert: 'none', // types: 'none' | 'avif' | 'webp' | undefined
   silent: false, // types: boolean | undefined
   verbose: true, // types: boolean | undefined
 }
@@ -23,12 +24,12 @@ const options = {
 function images() {
   return src(['images/**/*.*'], { base: 'images', encoding: false })
     .pipe(psimage(options))
-    .pipe(dest('dist'))
+    .pipe(dest('assets'))
 }
 
 // clean task
 async function clean() {
-  return await deleteAsync(['dist'])
+  return await deleteAsync(['assets'])
 }
 
 // watch

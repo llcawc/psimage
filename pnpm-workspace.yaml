@@ -1,0 +1,5 @@
+allowBuilds:
+  gifsicle: true
+  mozjpeg: true
+  optipng-bin: true
+  sharp: true

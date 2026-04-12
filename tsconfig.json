@@ -4,12 +4,8 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "rootDir": "./",
-    "outDir": "./",
-    // "skipLibCheck": true,
-    // "resolveJsonModule": true,
-    // "sourceMap": true,
-    // "removeComments": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
     "declaration": true,
     "newLine": "lf",
     "strict": true,
@@ -19,7 +15,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "isolatedDeclarations": true
   },
-  "include": ["./*"],
-  "exclude": [],
+  "include": ["src/*.ts", "types/**/*.d.ts"],
+  "exclude": []
 }
