@@ -1,6 +1,6 @@
 {
   "name": "psimage",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "gulp plugin for optimizing and minimizing jpg/png/gif/svg images and for converting to webp and avif formats",
   "homepage": "https://github.com/llcawc/psimage",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "test": "vitest --run",
     "lint": "oxlint",
     "fix": "oxlint --fix",
     "check": "oxfmt --check",
@@ -35,36 +36,48 @@
   "dependencies": {
     "colors": "^1.4.0",
     "fancy-log": "^2.0.0",
+    "gifsicle": "^7.0.1",
     "imagemin": "^9.0.1",
-    "imagemin-gifsicle": "^7.0.0",
-    "imagemin-mozjpeg": "^10.0.0",
     "imagemin-svgo": "^12.0.0",
-    "is-png": "^3.0.1",
+    "mozjpeg": "^8.0.0",
     "optipng-bin": "^9.0.0",
     "plugin-error": "^2.0.1",
     "plur": "^6.0.0",
     "pretty-bytes": "^7.1.0",
     "sharp": "^0.34.5",
-    "through2": "^4.0.2"
+    "through2": "^4.0.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/fancy-log": "^2.0.2",
     "@types/gulp": "^4.0.18",
     "@types/imagemin": "^9.0.1",
-    "@types/imagemin-gifsicle": "^7.0.4",
-    "@types/imagemin-mozjpeg": "^8.0.4",
     "@types/imagemin-svgo": "^11.0.0",
     "@types/node": "^25.6.0",
     "@types/through2": "^2.0.41",
     "@types/vinyl": "^2.0.12",
-    "@typescript/native-preview": "7.0.0-dev.20260412.1",
+    "@typescript/native-preview": "7.0.0-dev.20260417.1",
     "del": "^8.0.1",
     "gulp": "^5.0.1",
-    "oxfmt": "^0.44.0",
-    "oxlint": "^1.59.0",
-    "tsdown": "^0.21.7",
-    "typescript": "^6.0.2",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "tsdown": "^0.21.9",
+    "typescript": "^6.0.3",
     "vinyl": "^3.0.1",
     "vitest": "^4.1.4"
+  },
+  "resolutions": {
+    "uuid": "^9.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "gifsicle",
+      "mozjpeg",
+      "optipng-bin",
+      "sharp"
+    ],
+    "overrides": {
+      "uuid": "^9.0.0"
+    }
   }
 }

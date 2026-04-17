@@ -23,36 +23,34 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 //#endregion
 let node_buffer = require("node:buffer");
 let colors = require("colors");
-colors = __toESM(colors);
+colors = __toESM(colors, 1);
 let fancy_log = require("fancy-log");
-fancy_log = __toESM(fancy_log);
+fancy_log = __toESM(fancy_log, 1);
 let imagemin = require("imagemin");
-imagemin = __toESM(imagemin);
-let imagemin_gifsicle = require("imagemin-gifsicle");
-imagemin_gifsicle = __toESM(imagemin_gifsicle);
-let imagemin_mozjpeg = require("imagemin-mozjpeg");
-imagemin_mozjpeg = __toESM(imagemin_mozjpeg);
+imagemin = __toESM(imagemin, 1);
 let imagemin_svgo = require("imagemin-svgo");
-imagemin_svgo = __toESM(imagemin_svgo);
+imagemin_svgo = __toESM(imagemin_svgo, 1);
 let plugin_error = require("plugin-error");
-plugin_error = __toESM(plugin_error);
+plugin_error = __toESM(plugin_error, 1);
 let plur = require("plur");
-plur = __toESM(plur);
+plur = __toESM(plur, 1);
 let pretty_bytes = require("pretty-bytes");
-pretty_bytes = __toESM(pretty_bytes);
+pretty_bytes = __toESM(pretty_bytes, 1);
 let through2 = require("through2");
-through2 = __toESM(through2);
+through2 = __toESM(through2, 1);
 let sharp = require("sharp");
-sharp = __toESM(sharp);
-let is_png = require("is-png");
-is_png = __toESM(is_png);
-let optipng_bin = require("optipng-bin");
-optipng_bin = __toESM(optipng_bin);
+sharp = __toESM(sharp, 1);
+let gifsicle = require("gifsicle");
+gifsicle = __toESM(gifsicle, 1);
 let node_child_process = require("node:child_process");
 let node_fs_promises = require("node:fs/promises");
 let node_os = require("node:os");
 let node_path = require("node:path");
 let node_util = require("node:util");
+let mozjpeg = require("mozjpeg");
+mozjpeg = __toESM(mozjpeg, 1);
+let optipng_bin = require("optipng-bin");
+optipng_bin = __toESM(optipng_bin, 1);
 //#region src/avifcon.ts
 const defaultAvifOptions = {
 	quality: 90,
@@ -62,7 +60,10 @@ const defaultAvifOptions = {
 };
 var avifcon_default = (options) => async (buffer) => {
 	try {
-		const mergedOptions = Object.assign({}, defaultAvifOptions, options);
+		const mergedOptions = {
+			...defaultAvifOptions,
+			...options
+		};
 		return await (0, sharp.default)(buffer).avif(mergedOptions).toBuffer();
 	} catch (err) {
 		throw new plugin_error.default("psimage", err);
@@ -100,6 +101,140 @@ const execBufferWithProps = Object.assign(execBuffer, {
 	output: outputPlaceholder
 });
 //#endregion
+//#region src/is-gif.ts
+/**
+* Determines if a given buffer contains a GIF image by checking its magic number.
+*
+* @param buffer - A Uint8Array (or null/undefined) representing the file data.
+* @returns `true` if the buffer starts with the GIF signature (0x47 0x49 0x46), `false` otherwise.
+*
+* @example
+* ```ts
+* const data = new Uint8Array([0x47, 0x49, 0x46, 0x38, 0x39, 0x61]);
+* console.log(isGif(data)); // true
+* ```
+*/
+function isGif(buffer) {
+	if (!buffer || buffer.length < 3) return false;
+	return buffer[0] === 71 && buffer[1] === 73 && buffer[2] === 70;
+}
+//#endregion
+//#region src/gifsicle.ts
+var gifsicle_default = (options = {}) => async (buffer) => {
+	options = {
+		optimizationLevel: 3,
+		interlaced: false,
+		colors: 256,
+		...options
+	};
+	if (!node_buffer.Buffer.isBuffer(buffer)) throw new TypeError("Expected a buffer");
+	if (!isGif(buffer)) return buffer;
+	const args = ["--no-warnings", "--no-app-extensions"];
+	if (options.interlaced) args.push("--interlace");
+	if (options.optimizationLevel) args.push(`--optimize=${options.optimizationLevel}`);
+	if (options.colors) args.push(`--colors=${options.colors}`);
+	args.push("-o", execBufferWithProps.output);
+	args.push(execBufferWithProps.input);
+	return execBufferWithProps({
+		input: buffer,
+		bin: gifsicle.default,
+		args
+	});
+};
+//#endregion
+//#region src/is-jpg.ts
+/**
+* Determines if a given buffer contains a JPEG image by checking its magic number.
+*
+* @param buffer - A Uint8Array (or null/undefined) representing the file data.
+* @returns `true` if the buffer starts with the JPEG signature (0xFF 0xD8 0xFF), `false` otherwise.
+*
+* @example
+* ```ts
+* const data = new Uint8Array([0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46]);
+* console.log(isJpg(data)); // true
+* ```
+*/
+function isJpg(buffer) {
+	if (!buffer || buffer.length < 3) return false;
+	return buffer[0] === 255 && buffer[1] === 216 && buffer[2] === 255;
+}
+//#endregion
+//#region src/mozjpeg.ts
+var mozjpeg_default = (options = {}) => async (buffer) => {
+	const opts = {
+		quality: 95,
+		progressive: true,
+		trellis: true,
+		trellisDC: true,
+		overshoot: true,
+		...options
+	};
+	if (!node_buffer.Buffer.isBuffer(buffer)) throw new TypeError("Expected a buffer");
+	if (!isJpg(buffer)) return buffer;
+	if (options.fastcrush) throw new Error("Option `fastcrush` was renamed to `fastCrush`");
+	if (options.maxmemory) throw new Error("Option `maxmemory` was renamed to `maxMemory`");
+	if (options.notrellis) throw new Error("Option `notrellis` was renamed to `trellis` and inverted");
+	if (options.noovershoot) throw new Error("Option `noovershoot` was renamed to `overshoot` and inverted");
+	const args = [];
+	if (typeof opts.quality !== "undefined") args.push("-quality", String(opts.quality));
+	if (opts.progressive === false) args.push("-baseline");
+	if (opts.targa) args.push("-targa");
+	if (opts.revert) args.push("-revert");
+	if (opts.fastCrush) args.push("-fastcrush");
+	if (typeof opts.dcScanOpt !== "undefined") args.push("-dc-scan-opt", String(opts.dcScanOpt));
+	if (!opts.trellis) args.push("-notrellis");
+	if (!opts.trellisDC) args.push("-notrellis-dc");
+	if (opts.tune) args.push(`-tune-${opts.tune}`);
+	if (!opts.overshoot) args.push("-noovershoot");
+	if (opts.arithmetic) args.push("-arithmetic");
+	if (opts.dct) args.push("-dct", opts.dct);
+	if (opts.quantBaseline) args.push("-quant-baseline", String(opts.quantBaseline));
+	if (typeof opts.quantTable !== "undefined") args.push("-quant-table", String(opts.quantTable));
+	if (opts.smooth) args.push("-smooth", String(opts.smooth));
+	if (opts.maxMemory) args.push("-maxmemory", String(opts.maxMemory));
+	if (opts.sample) args.push("-sample", opts.sample.join(","));
+	args.push("-outfile", execBufferWithProps.output);
+	args.push(execBufferWithProps.input);
+	return execBufferWithProps({
+		input: buffer,
+		bin: mozjpeg.default,
+		args
+	});
+};
+//#endregion
+//#region src/is-png.ts
+/**
+* Determines if a given buffer contains a PNG image by checking its magic number.
+*
+* @param buffer - A Uint8Array (or null/undefined) representing the file data. Only the first 8 bytes are needed.
+* @returns `true` if the buffer starts with the PNG signature (0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A), `false` otherwise.
+*
+* @example
+* ```ts
+* // Node.js:
+* import {readChunk} from 'read-chunk';
+* import isPng from './is-png';
+*
+* const buffer = await readChunk('unicorn.png', {length: 8});
+* console.log(isPng(buffer)); // true
+* ```
+*
+* @example
+* ```ts
+* // Browser:
+* import isPng from './is-png';
+*
+* const response = await fetch('unicorn.png');
+* const buffer = await response.arrayBuffer();
+* console.log(isPng(new Uint8Array(buffer))); // true
+* ```
+*/
+function isPng(buffer) {
+	if (!buffer || buffer.length < 8) return false;
+	return buffer[0] === 137 && buffer[1] === 80 && buffer[2] === 78 && buffer[3] === 71 && buffer[4] === 13 && buffer[5] === 10 && buffer[6] === 26 && buffer[7] === 10;
+}
+//#endregion
 //#region src/optipng.ts
 var optipng_default = (options = {}) => async (buffer) => {
 	options = {
@@ -112,7 +247,7 @@ var optipng_default = (options = {}) => async (buffer) => {
 		...options
 	};
 	if (!Buffer.isBuffer(buffer)) throw new TypeError("Expected a buffer");
-	if (!(0, is_png.default)(buffer)) return buffer;
+	if (!isPng(buffer)) return buffer;
 	const arguments_ = [
 		"-strip",
 		"all",
@@ -142,7 +277,10 @@ const defaultWebpOptions = {
 };
 var webpcon_default = (options) => async (buffer) => {
 	try {
-		const mergedOptions = Object.assign({}, defaultWebpOptions, options);
+		const mergedOptions = {
+			...defaultWebpOptions,
+			...options
+		};
 		return await (0, sharp.default)(buffer).webp(mergedOptions).toBuffer();
 	} catch (err) {
 		throw new plugin_error.default("psimage", err);
@@ -150,6 +288,10 @@ var webpcon_default = (options) => async (buffer) => {
 };
 //#endregion
 //#region src/psimage.ts
+const REGEX_IMAGE_EXT = /png|jp?g|gif/i;
+const REGEX_WEBP_CONVERT_EXT = /ti?f|png|jp?g|gif|webp|avif/i;
+const REGEX_AVIF_CONVERT_EXT = /ti?f|png|jp?g|gif|webp|avif/i;
+const REGEX_SVG_EXT = /svg/i;
 /**
 * Function for image optimization and conversion.
 * @param options - Options for image optimization and conversion.
@@ -224,26 +366,26 @@ function psimage(options = {}) {
 		if (file.isBuffer()) try {
 			const originalSize = Number(file.contents.length);
 			let supportFlag = false;
-			if (convert === "none") if (/png|jp?g|gif/i.test(file.extname)) sizeLog(file, originalSize, await transform(file, [
-				(0, imagemin_mozjpeg.default)(mozjpegOptions),
+			if (convert === "none") if (REGEX_IMAGE_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [
+				mozjpeg_default(mozjpegOptions),
 				optipng_default(optipngOptions),
-				(0, imagemin_gifsicle.default)(gifsicleOptions)
+				gifsicle_default(gifsicleOptions)
 			]));
 			else supportFlag = true;
-			if (convert === "webp") if (/ti?f|png|jp?g|gif|webp|avif/i.test(file.extname)) {
+			if (convert === "webp") if (REGEX_WEBP_CONVERT_EXT.test(file.extname)) {
 				const optimizedSize = await transform(file, [webpcon_default(webpOptions)]);
 				file.extname = ".webp";
 				sizeLog(file, originalSize, optimizedSize);
 			} else supportFlag = true;
-			if (convert === "avif") if (/ti?f|png|jp?g|gif|webp|avif/i.test(file.extname)) {
+			if (convert === "avif") if (REGEX_AVIF_CONVERT_EXT.test(file.extname)) {
 				const optimizedSize = await transform(file, [avifcon_default(avifOptions)]);
 				file.extname = ".avif";
 				sizeLog(file, originalSize, optimizedSize);
 			} else supportFlag = true;
-			if (supportFlag) if (/svg/i.test(file.extname)) sizeLog(file, originalSize, await transform(file, [(0, imagemin_svgo.default)(svgoOptions)]));
+			if (supportFlag) if (REGEX_SVG_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [(0, imagemin_svgo.default)(svgoOptions)]));
 			else unsuppLog(file);
 		} catch (err) {
-			cb(new plugin_error.default(PLUGIN_NAME, err, Object.assign({}, mozjpegOptions, optipngOptions, svgoOptions, options, { fileName: file.path })));
+			cb(new plugin_error.default(PLUGIN_NAME, err, { fileName: file.path }));
 		}
 		cb(null, file);
 	}, function(cb) {

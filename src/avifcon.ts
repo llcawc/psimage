@@ -11,7 +11,7 @@ const defaultAvifOptions = {
 export default (options: AvifOptions) =>
   async (buffer: Uint8Array): Promise<Uint8Array> => {
     try {
-      const mergedOptions = Object.assign({}, defaultAvifOptions, options)
+      const mergedOptions = { ...defaultAvifOptions, ...options }
       return await sharp(buffer).avif(mergedOptions).toBuffer()
     } catch (err) {
       const error = err as Error

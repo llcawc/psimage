@@ -6,8 +6,6 @@ import { Buffer } from 'node:buffer'
 import colors from 'colors'
 import log from 'fancy-log'
 import imagemin, { type Plugin } from 'imagemin'
-import gifsicle from 'imagemin-gifsicle'
-import mozjpeg from 'imagemin-mozjpeg'
 import svgo from 'imagemin-svgo'
 import PluginError from 'plugin-error'
 import plur from 'plur'
@@ -16,8 +14,16 @@ import { type WebpOptions, type AvifOptions } from 'sharp'
 import through2 from 'through2'
 
 import avifcon from './avifcon'
+import gifsicle from './gifsicle'
+import mozjpeg from './mozjpeg'
 import optipng from './optipng'
 import webpcon from './webpcon'
+
+// Regular expressions for file extension matching (compiled once)
+const REGEX_IMAGE_EXT = /png|jp?g|gif/i
+const REGEX_WEBP_CONVERT_EXT = /ti?f|png|jp?g|gif|webp|avif/i
+const REGEX_AVIF_CONVERT_EXT = /ti?f|png|jp?g|gif|webp|avif/i
+const REGEX_SVG_EXT = /svg/i
 
 /**
  * Function for image optimization and conversion.
@@ -110,7 +116,7 @@ function psimage(
 
           // default optimize and minify
           if (convert === 'none') {
-            if (/png|jp?g|gif/i.test(file.extname)) {
+            if (REGEX_IMAGE_EXT.test(file.extname)) {
               const optimizedSize = await transform(file, [
                 mozjpeg(mozjpegOptions),
                 optipng(optipngOptions),
@@ -124,7 +130,7 @@ function psimage(
 
           // webp converted
           if (convert === 'webp') {
-            if (/ti?f|png|jp?g|gif|webp|avif/i.test(file.extname)) {
+            if (REGEX_WEBP_CONVERT_EXT.test(file.extname)) {
               const optimizedSize = await transform(file, [webpcon(webpOptions)])
               file.extname = '.webp'
               sizeLog(file, originalSize, optimizedSize)
@@ -135,7 +141,7 @@ function psimage(
 
           // avif converted
           if (convert === 'avif') {
-            if (/ti?f|png|jp?g|gif|webp|avif/i.test(file.extname)) {
+            if (REGEX_AVIF_CONVERT_EXT.test(file.extname)) {
               const optimizedSize = await transform(file, [avifcon(avifOptions)])
               file.extname = '.avif'
               sizeLog(file, originalSize, optimizedSize)
@@ -147,7 +153,7 @@ function psimage(
           // skip unsupported file
           if (supportFlag) {
             // svg optimize and minify
-            if (/svg/i.test(file.extname)) {
+            if (REGEX_SVG_EXT.test(file.extname)) {
               const optimizedSize = await transform(file, [svgo(svgoOptions)])
               sizeLog(file, originalSize, optimizedSize)
             } else {
@@ -155,8 +161,8 @@ function psimage(
             }
           }
         } catch (err) {
-          const opts = Object.assign({}, mozjpegOptions, optipngOptions, svgoOptions, options, { fileName: file.path })
-          const error = new PluginError(PLUGIN_NAME, err as string | Error, opts)
+          // Pass only necessary information to PluginError
+          const error = new PluginError(PLUGIN_NAME, err as string | Error, { fileName: file.path })
           cb(error)
         }
       }

@@ -1,7 +1,7 @@
-import isPng from 'is-png'
 import optipng from 'optipng-bin'
 
 import execBuffer from './exec-buffer.js'
+import isPng from './is-png'
 
 interface OptiPng {
   optimizationLevel?: number

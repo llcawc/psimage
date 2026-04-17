@@ -1,6 +1,6 @@
 # Node & project folders
 /.git/
-/assets/
+/.osp/
 /node_modules/
 
 # Config files

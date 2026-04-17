@@ -9,7 +9,7 @@ const defaultWebpOptions = {
 export default (options: WebpOptions) =>
   async (buffer: Uint8Array): Promise<Uint8Array> => {
     try {
-      const mergedOptions = Object.assign({}, defaultWebpOptions, options)
+      const mergedOptions = { ...defaultWebpOptions, ...options }
       return await sharp(buffer).webp(mergedOptions).toBuffer()
     } catch (err) {
       const error = err as Error
