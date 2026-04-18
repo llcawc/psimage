@@ -1,9 +1,9 @@
 import { Buffer } from 'node:buffer'
 
-import gifsicle from 'gifsicle'
+import { gifsicle } from 'gifsicle-neo'
 
 import execBuffer from './exec-buffer.js'
-import isGif from './is-gif'
+import isGif from './is-gif.js'
 
 interface GifOpt {
   optimizationLevel?: number

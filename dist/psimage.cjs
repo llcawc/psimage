@@ -22,6 +22,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 }) : target, mod));
 //#endregion
 let node_buffer = require("node:buffer");
+let node_stream = require("node:stream");
 let colors = require("colors");
 colors = __toESM(colors, 1);
 let fancy_log = require("fancy-log");
@@ -36,8 +37,6 @@ let plur = require("plur");
 plur = __toESM(plur, 1);
 let pretty_bytes = require("pretty-bytes");
 pretty_bytes = __toESM(pretty_bytes, 1);
-let through2 = require("through2");
-through2 = __toESM(through2, 1);
 let sharp = require("sharp");
 sharp = __toESM(sharp, 1);
 let gifsicle = require("gifsicle");
@@ -360,42 +359,46 @@ function psimage(options = {}) {
 	let totalBytes = 0;
 	let totalSavedBytes = 0;
 	let totalFiles = 0;
-	return through2.default.obj(async function(file, _, cb) {
-		if (file.isNull()) return cb(null, file);
-		if (file.isStream()) return cb(new plugin_error.default(PLUGIN_NAME, "Streaming is not supported"));
-		if (file.isBuffer()) try {
-			const originalSize = Number(file.contents.length);
-			let supportFlag = false;
-			if (convert === "none") if (REGEX_IMAGE_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [
-				mozjpeg_default(mozjpegOptions),
-				optipng_default(optipngOptions),
-				gifsicle_default(gifsicleOptions)
-			]));
-			else supportFlag = true;
-			if (convert === "webp") if (REGEX_WEBP_CONVERT_EXT.test(file.extname)) {
-				const optimizedSize = await transform(file, [webpcon_default(webpOptions)]);
-				file.extname = ".webp";
-				sizeLog(file, originalSize, optimizedSize);
-			} else supportFlag = true;
-			if (convert === "avif") if (REGEX_AVIF_CONVERT_EXT.test(file.extname)) {
-				const optimizedSize = await transform(file, [avifcon_default(avifOptions)]);
-				file.extname = ".avif";
-				sizeLog(file, originalSize, optimizedSize);
-			} else supportFlag = true;
-			if (supportFlag) if (REGEX_SVG_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [(0, imagemin_svgo.default)(svgoOptions)]));
-			else unsuppLog(file);
-		} catch (err) {
-			cb(new plugin_error.default(PLUGIN_NAME, err, { fileName: file.path }));
+	return new node_stream.Transform({
+		objectMode: true,
+		async transform(file, _, cb) {
+			if (file.isNull()) return cb(null, file);
+			if (file.isStream()) return cb(new plugin_error.default(PLUGIN_NAME, "Streaming is not supported"));
+			if (file.isBuffer()) try {
+				const originalSize = Number(file.contents.length);
+				let supportFlag = false;
+				if (convert === "none") if (REGEX_IMAGE_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [
+					mozjpeg_default(mozjpegOptions),
+					optipng_default(optipngOptions),
+					gifsicle_default(gifsicleOptions)
+				]));
+				else supportFlag = true;
+				if (convert === "webp") if (REGEX_WEBP_CONVERT_EXT.test(file.extname)) {
+					const optimizedSize = await transform(file, [webpcon_default(webpOptions)]);
+					file.extname = ".webp";
+					sizeLog(file, originalSize, optimizedSize);
+				} else supportFlag = true;
+				if (convert === "avif") if (REGEX_AVIF_CONVERT_EXT.test(file.extname)) {
+					const optimizedSize = await transform(file, [avifcon_default(avifOptions)]);
+					file.extname = ".avif";
+					sizeLog(file, originalSize, optimizedSize);
+				} else supportFlag = true;
+				if (supportFlag) if (REGEX_SVG_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [(0, imagemin_svgo.default)(svgoOptions)]));
+				else unsuppLog(file);
+			} catch (err) {
+				cb(new plugin_error.default(PLUGIN_NAME, err, { fileName: file.path }));
+			}
+			cb(null, file);
+		},
+		flush(cb) {
+			if (!silent) {
+				const percent = totalBytes > 0 ? totalSavedBytes / totalBytes * 100 : 0;
+				let message = `Total ${totalFiles} ${(0, plur.default)("image", totalFiles)} created`;
+				if (totalFiles > 0) message += colors.default.yellow(` (saved ${(0, pretty_bytes.default)(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, "")}%)`);
+				(0, fancy_log.default)(colors.default.cyan(`${PLUGIN_NAME}: ${message}`));
+			}
+			cb();
 		}
-		cb(null, file);
-	}, function(cb) {
-		if (!silent) {
-			const percent = totalBytes > 0 ? totalSavedBytes / totalBytes * 100 : 0;
-			let message = `Total ${totalFiles} ${(0, plur.default)("image", totalFiles)} created`;
-			if (totalFiles > 0) message += colors.default.yellow(` (saved ${(0, pretty_bytes.default)(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, "")}%)`);
-			(0, fancy_log.default)(colors.default.cyan(`${PLUGIN_NAME}: ${message}`));
-		}
-		cb();
 	});
 	/**
 	* logs the progress and results of the optimization and conversion process,

@@ -3,7 +3,7 @@ import { Buffer } from 'node:buffer'
 import mozjpeg from 'mozjpeg'
 
 import execBuffer from './exec-buffer.js'
-import isJpg from './is-jpg'
+import isJpg from './is-jpg.js'
 
 interface MozjpegOptions {
   trellis?: boolean

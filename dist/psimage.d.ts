@@ -1,5 +1,5 @@
-import { AvifOptions, WebpOptions } from "sharp";
 import { Transform } from "node:stream";
+import { AvifOptions, WebpOptions } from "sharp";
 
 //#region src/psimage.d.ts
 /**

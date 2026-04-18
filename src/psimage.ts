@@ -1,7 +1,7 @@
-import type { Transform } from 'node:stream'
 import type File from 'vinyl'
 
 import { Buffer } from 'node:buffer'
+import { Transform } from 'node:stream'
 
 import colors from 'colors'
 import log from 'fancy-log'
@@ -11,13 +11,12 @@ import PluginError from 'plugin-error'
 import plur from 'plur'
 import prettyBytes from 'pretty-bytes'
 import { type WebpOptions, type AvifOptions } from 'sharp'
-import through2 from 'through2'
 
-import avifcon from './avifcon'
-import gifsicle from './gifsicle'
-import mozjpeg from './mozjpeg'
-import optipng from './optipng'
-import webpcon from './webpcon'
+import avifcon from './avifcon.js'
+import gifsicle from './gifsicle.js'
+import mozjpeg from './mozjpeg.js'
+import optipng from './optipng.js'
+import webpcon from './webpcon.js'
 
 // Regular expressions for file extension matching (compiled once)
 const REGEX_IMAGE_EXT = /png|jp?g|gif/i
@@ -101,8 +100,9 @@ function psimage(
   let totalSavedBytes = 0
   let totalFiles = 0
 
-  return through2.obj(
-    async function (file, _, cb) {
+  return new Transform({
+    objectMode: true,
+    async transform(file: File, _, cb) {
       if (file.isNull()) {
         return cb(null, file)
       }
@@ -169,7 +169,7 @@ function psimage(
       cb(null, file)
     },
 
-    function (cb) {
+    flush(cb) {
       if (!silent) {
         const percent = totalBytes > 0 ? (totalSavedBytes / totalBytes) * 100 : 0
         let message = `Total ${totalFiles} ${plur('image', totalFiles)} created`
@@ -184,7 +184,7 @@ function psimage(
       }
       cb()
     },
-  )
+  })
 
   /**
    * logs the progress and results of the optimization and conversion process,
