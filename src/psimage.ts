@@ -3,7 +3,7 @@ import type File from 'vinyl'
 import { Buffer } from 'node:buffer'
 import { Transform } from 'node:stream'
 
-import colors from 'colors'
+import chalk from 'chalk'
 import log from 'fancy-log'
 import imagemin, { type Plugin } from 'imagemin'
 import svgo from 'imagemin-svgo'
@@ -175,12 +175,12 @@ function psimage(
         let message = `Total ${totalFiles} ${plur('image', totalFiles)} created`
 
         if (totalFiles > 0) {
-          message += colors.yellow(
+          message += chalk.yellow(
             ` (saved ${prettyBytes(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, '')}%)`,
           )
         }
 
-        log(colors.cyan(`${PLUGIN_NAME}: ${message}`))
+        log(chalk.cyan(`${PLUGIN_NAME}: ${message}`))
       }
       cb()
     },
@@ -207,8 +207,8 @@ function psimage(
 
     if (verbose) {
       log(
-        colors.cyan.dim(`${PLUGIN_NAME}:`),
-        colors.bold.green('🗸 ') + colors.grey(file.relative) + colors.dim.yellow(` (${message})`),
+        chalk.cyan.dim(`${PLUGIN_NAME}:`),
+        chalk.bold.green('🗸 ') + chalk.grey(file.relative) + chalk.yellow.dim(` (${message})`),
       )
     }
   }
@@ -220,10 +220,10 @@ function psimage(
   function unsuppLog(file: File) {
     if (verbose) {
       log(
-        colors.cyan.dim(`${PLUGIN_NAME}: `) +
-          colors.red('✘ ') +
-          colors.magenta('Unsupported file copied: ') +
-          colors.blue(file.relative),
+        chalk.cyan.dim(`${PLUGIN_NAME}: `) +
+          chalk.red('✘ ') +
+          chalk.magenta('Unsupported file copied: ') +
+          chalk.blue(file.relative),
       )
     }
   }

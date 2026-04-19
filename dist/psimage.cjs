@@ -23,8 +23,8 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 //#endregion
 let node_buffer = require("node:buffer");
 let node_stream = require("node:stream");
-let colors = require("colors");
-colors = __toESM(colors, 1);
+let chalk = require("chalk");
+chalk = __toESM(chalk, 1);
 let fancy_log = require("fancy-log");
 fancy_log = __toESM(fancy_log, 1);
 let imagemin = require("imagemin");
@@ -39,8 +39,7 @@ let pretty_bytes = require("pretty-bytes");
 pretty_bytes = __toESM(pretty_bytes, 1);
 let sharp = require("sharp");
 sharp = __toESM(sharp, 1);
-let gifsicle = require("gifsicle");
-gifsicle = __toESM(gifsicle, 1);
+let gifsicle_neo = require("gifsicle-neo");
 let node_child_process = require("node:child_process");
 let node_fs_promises = require("node:fs/promises");
 let node_os = require("node:os");
@@ -136,7 +135,7 @@ var gifsicle_default = (options = {}) => async (buffer) => {
 	args.push(execBufferWithProps.input);
 	return execBufferWithProps({
 		input: buffer,
-		bin: gifsicle.default,
+		bin: gifsicle_neo.gifsicle,
 		args
 	});
 };
@@ -394,8 +393,8 @@ function psimage(options = {}) {
 			if (!silent) {
 				const percent = totalBytes > 0 ? totalSavedBytes / totalBytes * 100 : 0;
 				let message = `Total ${totalFiles} ${(0, plur.default)("image", totalFiles)} created`;
-				if (totalFiles > 0) message += colors.default.yellow(` (saved ${(0, pretty_bytes.default)(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, "")}%)`);
-				(0, fancy_log.default)(colors.default.cyan(`${PLUGIN_NAME}: ${message}`));
+				if (totalFiles > 0) message += chalk.default.yellow(` (saved ${(0, pretty_bytes.default)(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, "")}%)`);
+				(0, fancy_log.default)(chalk.default.cyan(`${PLUGIN_NAME}: ${message}`));
 			}
 			cb();
 		}
@@ -417,14 +416,14 @@ function psimage(options = {}) {
 			totalSavedBytes += saved;
 			totalFiles++;
 		}
-		if (verbose) (0, fancy_log.default)(colors.default.cyan.dim(`${PLUGIN_NAME}:`), colors.default.bold.green("🗸 ") + colors.default.grey(file.relative) + colors.default.dim.yellow(` (${message})`));
+		if (verbose) (0, fancy_log.default)(chalk.default.cyan.dim(`${PLUGIN_NAME}:`), chalk.default.bold.green("🗸 ") + chalk.default.grey(file.relative) + chalk.default.yellow.dim(` (${message})`));
 	}
 	/**
 	* logs unsupported file
 	* @param file
 	*/
 	function unsuppLog(file) {
-		if (verbose) (0, fancy_log.default)(colors.default.cyan.dim(`${PLUGIN_NAME}: `) + colors.default.red("✘ ") + colors.default.magenta("Unsupported file copied: ") + colors.default.blue(file.relative));
+		if (verbose) (0, fancy_log.default)(chalk.default.cyan.dim(`${PLUGIN_NAME}: `) + chalk.default.red("✘ ") + chalk.default.magenta("Unsupported file copied: ") + chalk.default.blue(file.relative));
 	}
 	/**
 	* Convert image file using provided plugins.

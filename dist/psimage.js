@@ -1,6 +1,6 @@
 import { Buffer as Buffer$1 } from "node:buffer";
 import { Transform } from "node:stream";
-import colors from "colors";
+import chalk from "chalk";
 import log from "fancy-log";
 import imagemin from "imagemin";
 import svgo from "imagemin-svgo";
@@ -8,7 +8,7 @@ import PluginError from "plugin-error";
 import plur from "plur";
 import prettyBytes from "pretty-bytes";
 import sharp from "sharp";
-import gifsicle from "gifsicle";
+import { gifsicle } from "gifsicle-neo";
 import { execFile } from "node:child_process";
 import { readFile, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -360,8 +360,8 @@ function psimage(options = {}) {
 			if (!silent) {
 				const percent = totalBytes > 0 ? totalSavedBytes / totalBytes * 100 : 0;
 				let message = `Total ${totalFiles} ${plur("image", totalFiles)} created`;
-				if (totalFiles > 0) message += colors.yellow(` (saved ${prettyBytes(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, "")}%)`);
-				log(colors.cyan(`${PLUGIN_NAME}: ${message}`));
+				if (totalFiles > 0) message += chalk.yellow(` (saved ${prettyBytes(totalSavedBytes)} - ${percent.toFixed(1).replace(/\.0$/, "")}%)`);
+				log(chalk.cyan(`${PLUGIN_NAME}: ${message}`));
 			}
 			cb();
 		}
@@ -383,14 +383,14 @@ function psimage(options = {}) {
 			totalSavedBytes += saved;
 			totalFiles++;
 		}
-		if (verbose) log(colors.cyan.dim(`${PLUGIN_NAME}:`), colors.bold.green("🗸 ") + colors.grey(file.relative) + colors.dim.yellow(` (${message})`));
+		if (verbose) log(chalk.cyan.dim(`${PLUGIN_NAME}:`), chalk.bold.green("🗸 ") + chalk.grey(file.relative) + chalk.yellow.dim(` (${message})`));
 	}
 	/**
 	* logs unsupported file
 	* @param file
 	*/
 	function unsuppLog(file) {
-		if (verbose) log(colors.cyan.dim(`${PLUGIN_NAME}: `) + colors.red("✘ ") + colors.magenta("Unsupported file copied: ") + colors.blue(file.relative));
+		if (verbose) log(chalk.cyan.dim(`${PLUGIN_NAME}: `) + chalk.red("✘ ") + chalk.magenta("Unsupported file copied: ") + chalk.blue(file.relative));
 	}
 	/**
 	* Convert image file using provided plugins.

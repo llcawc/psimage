@@ -35,9 +35,9 @@
     "build": "tsdown"
   },
   "dependencies": {
-    "colors": "^1.4.0",
+    "chalk": "^5.6.2",
     "fancy-log": "^2.0.0",
-    "gifsicle-neo": "^8.0.1",
+    "gifsicle-neo": "^8.0.2",
     "imagemin": "^9.0.1",
     "imagemin-svgo": "^12.0.0",
     "mozjpeg": "^8.0.0",
@@ -54,7 +54,7 @@
     "@types/imagemin-svgo": "^11.0.0",
     "@types/node": "^25.6.0",
     "@types/vinyl": "^2.0.12",
-    "@typescript/native-preview": "7.0.0-dev.20260418.1",
+    "@typescript/native-preview": "7.0.0-dev.20260419.1",
     "del": "^8.0.1",
     "gulp": "^5.0.1",
     "oxfmt": "^0.45.0",
