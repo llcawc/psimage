@@ -11,9 +11,6 @@ importers:
       chalk:
         specifier: ^5.6.2
         version: 5.6.2
-      colors:
-        specifier: ^1.4.0
-        version: 1.4.0
       fancy-log:
         specifier: ^2.0.0
         version: 2.0.0
@@ -23,9 +20,9 @@ importers:
       imagemin:
         specifier: ^9.0.1
         version: 9.0.1
-      imagemin-svgo:
-        specifier: ^12.0.0
-        version: 12.0.0
+      is-svg:
+        specifier: ^6.1.0
+        version: 6.1.0
       mozjpeg:
         specifier: ^8.0.0
         version: 8.0.0
@@ -44,6 +41,9 @@ importers:
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
+      svgo:
+        specifier: ^4.0.1
+        version: 4.0.1
     devDependencies:
       '@types/fancy-log':
         specifier: ^2.0.2
@@ -54,9 +54,6 @@ importers:
       '@types/imagemin':
         specifier: ^9.0.1
         version: 9.0.1
-      '@types/imagemin-svgo':
-        specifier: ^11.0.0
-        version: 11.0.0
       '@types/node':
         specifier: ^25.6.0
         version: 25.6.0
@@ -822,9 +819,6 @@ packages:
   '@types/gulp@4.0.18':
     resolution: {integrity: sha512-IqkYa4sXkwH2uwqO2aXYOoAisJpLX13BPaS6lmEAoG4BbgOay3qqGQFsT9LMSSQVMQlEKU7wTUW0sPV46V0olw==}
 
-  '@types/imagemin-svgo@11.0.0':
-    resolution: {integrity: sha512-NNwCDWaiD8u9zMgRZBwClgnhovpZJeckfAHEBRgBvRmUZQoja6+XzGKZHJra32+8dp6e1yL4fc2S9rM8d94acQ==}
-
   '@types/imagemin@9.0.1':
     resolution: {integrity: sha512-xMWpvrUhtYxl6EeW+UhVH3rwUKhCRx21XddcoWByjDAasXZT5pQaCn0YVnXoTijX5hlTrGqV4TGQL/Htpp00+w==}
 
@@ -1138,20 +1132,12 @@ packages:
     resolution: {integrity: sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==}
     hasBin: true
 
-  colors@1.4.0:
-    resolution: {integrity: sha512-a+UqTh4kgZg/SlGvfbzDHpgRu7AAQOmmqRHJnxhRZICKFUT91brVhNNt58CMWU9PsBbv3PDCZUHbVxuDiH2mtA==}
-    engines: {node: '>=0.1.90'}
-
   commander@11.1.0:
     resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
     engines: {node: '>=16'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
-
-  commander@7.2.0:
-    resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
-    engines: {node: '>= 10'}
 
   config-chain@1.1.13:
     resolution: {integrity: sha512-qj+f8APARXHrM0hraqXYb2/bOVSV4PvJQlNZ/DVj0QrmNM2q2euizkeuVckQ57J+W0mRH6Hvi+k50M4Jul2VRQ==}
@@ -1191,10 +1177,6 @@ packages:
   css-tree@2.2.1:
     resolution: {integrity: sha512-OA0mILzGc1kCOCSJerOeqDxDQ4HOh+G8NbOJFOTgOCzpw7fCBubk0fEyxp8AgOL/jvLgYA/uV0cMbe43ElF1JA==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
-
-  css-tree@2.3.1:
-    resolution: {integrity: sha512-6Fv1DV/TYw//QF5IzQdqsNDjx/wc8TrMBZsqjL9eW01tWb7R7k/mq+/VXfJCl7SoD5emsJop9cOByJZfs8hYIw==}
-    engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0}
 
   css-tree@3.2.1:
     resolution: {integrity: sha512-X7sjQzceUhu1u7Y/ylrRZFU2FS6LRiFVp6rKLPg23y3x3c3DOKAwuXGDp+PAGjh6CSnCjYeAul8pcT8bAl+lSA==}
@@ -1669,10 +1651,6 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  imagemin-svgo@12.0.0:
-    resolution: {integrity: sha512-6f2bS/QTBsGafHCvG3FPxe3efHWq7EryznpDPg1PnfhnD4JO90sKrzW4W4AcN2HoWBsZl4yqiBWw/qxIWiPHJA==}
-    engines: {node: '>=20'}
-
   imagemin@9.0.1:
     resolution: {integrity: sha512-UoHOfynN8QeqRoUGunn6ilMnLpJ+utbmleP2ufcFqaGal8mY/PeOpV43N31uqtb+CBMFqQ7hxgKzIaAAnmcrdA==}
     engines: {node: '>=18'}
@@ -1959,9 +1937,6 @@ packages:
 
   mdn-data@2.0.28:
     resolution: {integrity: sha512-aylIc7Z9y4yzHYAJNuESG3hfhC+0Ibp/MAMiaOZgNv4pmEdFyfZhhhny4MNiAfWdBQ1RQ2mfDWmM1x8SvGyp8g==}
-
-  mdn-data@2.0.30:
-    resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
 
   mdn-data@2.27.1:
     resolution: {integrity: sha512-9Yubnt3e8A0OKwxYSXyhLymGW4sCufcLG6VdiDdUGVkPhpqLxlvP5vl1983gQjJl3tqbrM731mjaZaP68AgosQ==}
@@ -2525,11 +2500,6 @@ packages:
 
   sver@1.8.4:
     resolution: {integrity: sha512-71o1zfzyawLfIWBOmw8brleKyvnbn73oVHNCsu51uPMz/HWiKkkXsI31JjHW5zqXEqnPYkIiHd8ZmL7FCimLEA==}
-
-  svgo@3.3.3:
-    resolution: {integrity: sha512-+wn7I4p7YgJhHs38k2TNjy1vCfPIfLIJWR5MnCStsN8WuuTcBnRKcMHQLMM2ijxGZmDoZwNv8ipl5aTTen62ng==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
 
   svgo@4.0.1:
     resolution: {integrity: sha512-XDpWUOPC6FEibaLzjfe0ucaV0YrOjYotGJO1WpF0Zd+n6ZGEQUsSugaoLq9QkEZtAfQIxT42UChcssDVPP3+/w==}
@@ -3336,11 +3306,6 @@ snapshots:
       '@types/vinyl-fs': 3.0.7
       chokidar: 3.6.0
 
-  '@types/imagemin-svgo@11.0.0':
-    dependencies:
-      '@types/imagemin': 9.0.1
-      svgo: 3.3.3
-
   '@types/imagemin@9.0.1':
     dependencies:
       '@types/node': 25.6.0
@@ -3682,13 +3647,9 @@ snapshots:
 
   color-support@1.1.3: {}
 
-  colors@1.4.0: {}
-
   commander@11.1.0: {}
 
   commander@2.20.3: {}
-
-  commander@7.2.0: {}
 
   config-chain@1.1.13:
     dependencies:
@@ -3741,11 +3702,6 @@ snapshots:
   css-tree@2.2.1:
     dependencies:
       mdn-data: 2.0.28
-      source-map-js: 1.2.1
-
-  css-tree@2.3.1:
-    dependencies:
-      mdn-data: 2.0.30
       source-map-js: 1.2.1
 
   css-tree@3.2.1:
@@ -4325,11 +4281,6 @@ snapshots:
 
   image-dimensions@2.5.0: {}
 
-  imagemin-svgo@12.0.0:
-    dependencies:
-      is-svg: 6.1.0
-      svgo: 4.0.1
-
   imagemin@9.0.1:
     dependencies:
       change-file-extension: 0.1.1
@@ -4548,8 +4499,6 @@ snapshots:
   math-intrinsics@1.1.0: {}
 
   mdn-data@2.0.28: {}
-
-  mdn-data@2.0.30: {}
 
   mdn-data@2.27.1: {}
 
@@ -5133,16 +5082,6 @@ snapshots:
   sver@1.8.4:
     optionalDependencies:
       semver: 6.3.1
-
-  svgo@3.3.3:
-    dependencies:
-      commander: 7.2.0
-      css-select: 5.2.2
-      css-tree: 2.3.1
-      css-what: 6.2.2
-      csso: 5.0.5
-      picocolors: 1.1.1
-      sax: 1.6.0
 
   svgo@4.0.1:
     dependencies:

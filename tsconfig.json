@@ -2,10 +2,9 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "types": ["node"],
+    "module": "node20",
+    "moduleResolution": "nodenext",
     "declaration": true,
     "newLine": "lf",
     "strict": true,

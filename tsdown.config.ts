@@ -5,10 +5,10 @@ export default defineConfig({
   format: {
     esm: {
       fixedExtension: false,
-      target: ['esnext'],
+      target: ['node20'],
     },
     cjs: {
-      target: ['node16'],
+      target: ['node20'],
     },
   },
   dts: {

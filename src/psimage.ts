@@ -6,16 +6,17 @@ import { Transform } from 'node:stream'
 import chalk from 'chalk'
 import log from 'fancy-log'
 import imagemin, { type Plugin } from 'imagemin'
-import svgo from 'imagemin-svgo'
 import PluginError from 'plugin-error'
 import plur from 'plur'
 import prettyBytes from 'pretty-bytes'
 import { type WebpOptions, type AvifOptions } from 'sharp'
+import { type Config as SvgOptions } from 'svgo'
 
 import avifcon from './avifcon.js'
 import gifsicle from './gifsicle.js'
 import mozjpeg from './mozjpeg.js'
 import optipng from './optipng.js'
+import svgo from './svgo.js'
 import webpcon from './webpcon.js'
 
 // Regular expressions for file extension matching (compiled once)
@@ -27,10 +28,10 @@ const REGEX_SVG_EXT = /svg/i
 /**
  * Function for image optimization and conversion.
  * @param options - Options for image optimization and conversion.
- * @param options.mozjpegOptions - Options for the "imagemin-mozjpeg" plugin.
- * @param options.optipngOptions - Options for the "imagemin-optipng" plugin.
- * @param options.svgoOptions - Options for the "imagemin-svgo" plugin.
- * @param options.gifsicleOptions - Options for the "imagemin-gifsicle" plugin.
+ * @param options.mozjpegOptions - Options for the "mozjpeg" plugin.
+ * @param options.optipngOptions - Options for the "optipng" plugin.
+ * @param options.svgoOptions - SvgOptions for the "svgo" plugin.
+ * @param options.gifsicleOptions - Options for the "gifsicle" plugin.
  * @param options.avifOptions - AvifOptions for the "sharp" plugin.
  * @param options.webpOptions - WebpOptions for the "sharp" plugin.
  * @param options.convert - Options for enabling conversion using 'avif' or 'webp' plugins.
@@ -75,7 +76,7 @@ function psimage(
   options: {
     mozjpegOptions?: object | undefined
     optipngOptions?: object | undefined
-    svgoOptions?: object | undefined
+    svgoOptions?: SvgOptions | undefined
     gifsicleOptions?: object | undefined
     avifOptions?: AvifOptions | undefined
     webpOptions?: WebpOptions | undefined
@@ -244,4 +245,4 @@ function psimage(
 }
 
 export { psimage }
-export { type WebpOptions, type AvifOptions }
+export { type WebpOptions, type AvifOptions, type SvgOptions }

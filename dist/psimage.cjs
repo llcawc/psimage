@@ -29,8 +29,6 @@ let fancy_log = require("fancy-log");
 fancy_log = __toESM(fancy_log, 1);
 let imagemin = require("imagemin");
 imagemin = __toESM(imagemin, 1);
-let imagemin_svgo = require("imagemin-svgo");
-imagemin_svgo = __toESM(imagemin_svgo, 1);
 let plugin_error = require("plugin-error");
 plugin_error = __toESM(plugin_error, 1);
 let plur = require("plur");
@@ -49,6 +47,9 @@ let mozjpeg = require("mozjpeg");
 mozjpeg = __toESM(mozjpeg, 1);
 let optipng_bin = require("optipng-bin");
 optipng_bin = __toESM(optipng_bin, 1);
+let is_svg = require("is-svg");
+is_svg = __toESM(is_svg, 1);
+let svgo = require("svgo");
 //#region src/avifcon.ts
 const defaultAvifOptions = {
 	quality: 90,
@@ -268,6 +269,23 @@ var optipng_default = (options = {}) => async (buffer) => {
 	});
 };
 //#endregion
+//#region src/svgo.ts
+const defaultSvgoOptions = { multipass: true };
+var svgo_default = (options) => async (buffer) => {
+	try {
+		const mergedOptions = {
+			...defaultSvgoOptions,
+			...options
+		};
+		const contents = new node_util.TextDecoder().decode(buffer);
+		if (!(0, is_svg.default)(contents)) return buffer;
+		const { data } = (0, svgo.optimize)(contents, mergedOptions);
+		return node_buffer.Buffer.from(data);
+	} catch (err) {
+		throw new plugin_error.default("psimage", err);
+	}
+};
+//#endregion
 //#region src/webpcon.ts
 const defaultWebpOptions = {
 	quality: 90,
@@ -293,10 +311,10 @@ const REGEX_SVG_EXT = /svg/i;
 /**
 * Function for image optimization and conversion.
 * @param options - Options for image optimization and conversion.
-* @param options.mozjpegOptions - Options for the "imagemin-mozjpeg" plugin.
-* @param options.optipngOptions - Options for the "imagemin-optipng" plugin.
-* @param options.svgoOptions - Options for the "imagemin-svgo" plugin.
-* @param options.gifsicleOptions - Options for the "imagemin-gifsicle" plugin.
+* @param options.mozjpegOptions - Options for the "mozjpeg" plugin.
+* @param options.optipngOptions - Options for the "optipng" plugin.
+* @param options.svgoOptions - SvgOptions for the "svgo" plugin.
+* @param options.gifsicleOptions - Options for the "gifsicle" plugin.
 * @param options.avifOptions - AvifOptions for the "sharp" plugin.
 * @param options.webpOptions - WebpOptions for the "sharp" plugin.
 * @param options.convert - Options for enabling conversion using 'avif' or 'webp' plugins.
@@ -382,7 +400,7 @@ function psimage(options = {}) {
 					file.extname = ".avif";
 					sizeLog(file, originalSize, optimizedSize);
 				} else supportFlag = true;
-				if (supportFlag) if (REGEX_SVG_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [(0, imagemin_svgo.default)(svgoOptions)]));
+				if (supportFlag) if (REGEX_SVG_EXT.test(file.extname)) sizeLog(file, originalSize, await transform(file, [svgo_default(svgoOptions)]));
 				else unsuppLog(file);
 			} catch (err) {
 				cb(new plugin_error.default(PLUGIN_NAME, err, { fileName: file.path }));

@@ -1,14 +1,15 @@
 import { Transform } from "node:stream";
 import { AvifOptions, WebpOptions } from "sharp";
+import { Config as SvgOptions } from "svgo";
 
 //#region src/psimage.d.ts
 /**
  * Function for image optimization and conversion.
  * @param options - Options for image optimization and conversion.
- * @param options.mozjpegOptions - Options for the "imagemin-mozjpeg" plugin.
- * @param options.optipngOptions - Options for the "imagemin-optipng" plugin.
- * @param options.svgoOptions - Options for the "imagemin-svgo" plugin.
- * @param options.gifsicleOptions - Options for the "imagemin-gifsicle" plugin.
+ * @param options.mozjpegOptions - Options for the "mozjpeg" plugin.
+ * @param options.optipngOptions - Options for the "optipng" plugin.
+ * @param options.svgoOptions - SvgOptions for the "svgo" plugin.
+ * @param options.gifsicleOptions - Options for the "gifsicle" plugin.
  * @param options.avifOptions - AvifOptions for the "sharp" plugin.
  * @param options.webpOptions - WebpOptions for the "sharp" plugin.
  * @param options.convert - Options for enabling conversion using 'avif' or 'webp' plugins.
@@ -52,7 +53,7 @@ import { AvifOptions, WebpOptions } from "sharp";
 declare function psimage(options?: {
   mozjpegOptions?: object | undefined;
   optipngOptions?: object | undefined;
-  svgoOptions?: object | undefined;
+  svgoOptions?: SvgOptions | undefined;
   gifsicleOptions?: object | undefined;
   avifOptions?: AvifOptions | undefined;
   webpOptions?: WebpOptions | undefined;
@@ -61,4 +62,4 @@ declare function psimage(options?: {
   verbose?: boolean | undefined;
 }): Transform;
 //#endregion
-export { type AvifOptions, type WebpOptions, psimage };
+export { type AvifOptions, type SvgOptions, type WebpOptions, psimage };
