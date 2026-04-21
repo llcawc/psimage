@@ -40,7 +40,7 @@
     "gifsicle-neo": "^8.0.2",
     "imagemin": "^9.0.1",
     "is-svg": "^6.1.0",
-    "mozjpeg": "^8.0.0",
+    "mozjpeg-neo": "^9.0.0",
     "optipng-bin": "^9.0.0",
     "plugin-error": "^2.0.1",
     "plur": "^6.0.0",

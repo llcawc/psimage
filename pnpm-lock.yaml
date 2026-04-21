@@ -23,9 +23,9 @@ importers:
       is-svg:
         specifier: ^6.1.0
         version: 6.1.0
-      mozjpeg:
-        specifier: ^8.0.0
-        version: 8.0.0
+      mozjpeg-neo:
+        specifier: ^9.0.0
+        version: 9.0.0
       optipng-bin:
         specifier: ^9.0.0
         version: 9.0.0
@@ -1957,9 +1957,9 @@ packages:
     resolution: {integrity: sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==}
     engines: {node: '>=4'}
 
-  mozjpeg@8.0.0:
-    resolution: {integrity: sha512-Ca2Yhah9hG0Iutgsn8MOrAl37P9ThnKsJatjXoWdUO+8X8GeG/6ahvHZrTyqvbs6leMww1SauWUCao/L9qBuFQ==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+  mozjpeg-neo@9.0.0:
+    resolution: {integrity: sha512-Z8bnPCzg9Y8D6pVJFvZVxflb9HNmOMYwaYVB1NtkewX5VU3XMl62GTcG8VA8lQw5190sRN+rGIQaJNduZGtXcA==}
+    engines: {node: '>=20'}
     hasBin: true
 
   mute-stdout@2.0.0:
@@ -4513,10 +4513,9 @@ snapshots:
 
   mimic-response@1.0.1: {}
 
-  mozjpeg@8.0.0:
+  mozjpeg-neo@9.0.0:
     dependencies:
-      bin-build: 3.0.0
-      bin-wrapper: 4.1.0
+      execa: 9.6.1
 
   mute-stdout@2.0.0: {}
 

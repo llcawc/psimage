@@ -43,8 +43,7 @@ let node_fs_promises = require("node:fs/promises");
 let node_os = require("node:os");
 let node_path = require("node:path");
 let node_util = require("node:util");
-let mozjpeg = require("mozjpeg");
-mozjpeg = __toESM(mozjpeg, 1);
+let mozjpeg_neo = require("mozjpeg-neo");
 let optipng_bin = require("optipng-bin");
 optipng_bin = __toESM(optipng_bin, 1);
 let is_svg = require("is-svg");
@@ -197,7 +196,7 @@ var mozjpeg_default = (options = {}) => async (buffer) => {
 	args.push(execBufferWithProps.input);
 	return execBufferWithProps({
 		input: buffer,
-		bin: mozjpeg.default,
+		bin: mozjpeg_neo.mozjpeg,
 		args
 	});
 };

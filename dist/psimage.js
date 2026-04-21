@@ -13,7 +13,7 @@ import { readFile, unlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { TextDecoder, promisify } from "node:util";
-import mozjpeg from "mozjpeg";
+import { mozjpeg } from "mozjpeg-neo";
 import optipng from "optipng-bin";
 import isSvg from "is-svg";
 import { optimize } from "svgo";

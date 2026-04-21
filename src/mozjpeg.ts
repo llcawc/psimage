@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
 
-import mozjpeg from 'mozjpeg'
+import { mozjpeg } from 'mozjpeg-neo'
 
 import execBuffer from './exec-buffer.js'
 import isJpg from './is-jpg.js'

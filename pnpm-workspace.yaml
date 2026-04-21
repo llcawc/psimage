@@ -1,5 +1,5 @@
 allowBuilds:
   gifsicle-neo: true
-  mozjpeg: true
+  mozjpeg-neo: true
   optipng-bin: true
   sharp: true
