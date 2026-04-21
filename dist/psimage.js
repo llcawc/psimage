@@ -14,7 +14,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { TextDecoder, promisify } from "node:util";
 import { mozjpeg } from "mozjpeg-neo";
-import optipng from "optipng-bin";
+import { optipng } from "optipng-neo";
 import isSvg from "is-svg";
 import { optimize } from "svgo";
 //#region src/avifcon.ts

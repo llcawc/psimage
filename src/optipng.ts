@@ -1,4 +1,4 @@
-import optipng from 'optipng-bin'
+import { optipng } from 'optipng-neo'
 
 import execBuffer from './exec-buffer.js'
 import isPng from './is-png.js'

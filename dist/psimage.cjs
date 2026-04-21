@@ -44,8 +44,7 @@ let node_os = require("node:os");
 let node_path = require("node:path");
 let node_util = require("node:util");
 let mozjpeg_neo = require("mozjpeg-neo");
-let optipng_bin = require("optipng-bin");
-optipng_bin = __toESM(optipng_bin, 1);
+let optipng_neo = require("optipng-neo");
 let is_svg = require("is-svg");
 is_svg = __toESM(is_svg, 1);
 let svgo = require("svgo");
@@ -263,7 +262,7 @@ var optipng_default = (options = {}) => async (buffer) => {
 	arguments_.push(execBufferWithProps.input);
 	return execBufferWithProps({
 		input: buffer,
-		bin: optipng_bin.default,
+		bin: optipng_neo.optipng,
 		args: arguments_
 	});
 };
