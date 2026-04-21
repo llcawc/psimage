@@ -7,7 +7,6 @@
   "author": "llcawc",
   "files": [
     "dist",
-    "types",
     "package.json",
     "LICENSE",
     "README.md"
