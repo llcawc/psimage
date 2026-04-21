@@ -9,7 +9,7 @@ const defaultSvgoOptions = {
   multipass: true,
 } as SvgOptions
 
-export default (options: SvgOptions) =>
+export default (options: SvgOptions = {}) =>
   async (buffer: Uint8Array): Promise<Uint8Array> => {
     try {
       const mergedOptions = { ...defaultSvgoOptions, ...options }

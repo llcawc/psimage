@@ -1,4 +1,4 @@
-import avifcon from "../src/avifcon.ts";
+import avifcon from "../src/avifcon.js";
 import fs from "fs";
 
 async function test() {
@@ -7,7 +7,7 @@ async function test() {
     const buffer = fs.readFileSync("./images/burg.jpg");
     const plugin = avifcon({ quality: 75 });
     const result = await plugin(buffer);
-    console.log("AVIF conversion successful, output size:",buffer.length, ' > ' ,result.length);
+    console.log("AVIF conversion successful, output size:", buffer.length, " > ", result.length);
 
     // Сохраним результат для проверки
     fs.writeFileSync("./test/test-output.avif", result);

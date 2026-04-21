@@ -238,7 +238,7 @@ var optipng_default = (options = {}) => async (buffer) => {
 //#endregion
 //#region src/svgo.ts
 const defaultSvgoOptions = { multipass: true };
-var svgo_default = (options) => async (buffer) => {
+var svgo_default = (options = {}) => async (buffer) => {
 	try {
 		const mergedOptions = {
 			...defaultSvgoOptions,

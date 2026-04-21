@@ -1,7 +1,10 @@
-import { describe, it, expect } from 'vitest'
-import webpcon from '../src/webpcon.ts'
 import fs from 'fs'
 import path from 'path'
+
+import { describe, it, expect, afterAll } from 'vitest'
+
+import webpcon from '../src/webpcon.js'
+import { measureTest, logSuiteSummary } from './helpers.js'
 
 describe('webpcon', () => {
   const imageDir = './images'
@@ -10,7 +13,7 @@ describe('webpcon', () => {
   it('should convert JPEG to WebP', async () => {
     const buffer = fs.readFileSync(path.join(imageDir, 'burg.jpg'))
     const plugin = webpcon({ quality: 75 })
-    const result = await plugin(buffer)
+    const result = await measureTest('webpcon › should convert JPEG to WebP', buffer, () => plugin(buffer))
     expect(result).toBeInstanceOf(Buffer)
     expect(result.length).toBeGreaterThan(0)
     // WebP обычно меньше JPEG
@@ -21,7 +24,7 @@ describe('webpcon', () => {
   it('should convert PNG to WebP', async () => {
     const buffer = fs.readFileSync(path.join(imageDir, 'world.png'))
     const plugin = webpcon({ quality: 75 })
-    const result = await plugin(buffer)
+    const result = await measureTest('webpcon › should convert PNG to WebP', buffer, () => plugin(buffer))
     expect(result).toBeInstanceOf(Buffer)
     expect(result.length).toBeGreaterThan(0)
   })
@@ -30,7 +33,7 @@ describe('webpcon', () => {
   it('should convert GIF to WebP', async () => {
     const buffer = fs.readFileSync(path.join(imageDir, 'world.gif'))
     const plugin = webpcon({ quality: 75 })
-    const result = await plugin(buffer)
+    const result = await measureTest('webpcon › should convert GIF to WebP', buffer, () => plugin(buffer))
     expect(result).toBeInstanceOf(Buffer)
     expect(result.length).toBeGreaterThan(0)
   })
@@ -39,7 +42,7 @@ describe('webpcon', () => {
   it('should convert AVIF to WebP', async () => {
     const buffer = fs.readFileSync(path.join(imageDir, 'shato.avif'))
     const plugin = webpcon({ quality: 75 })
-    const result = await plugin(buffer)
+    const result = await measureTest('webpcon › should convert AVIF to WebP', buffer, () => plugin(buffer))
     expect(result).toBeInstanceOf(Buffer)
     expect(result.length).toBeGreaterThan(0)
   })
@@ -48,8 +51,14 @@ describe('webpcon', () => {
   it('should process WebP and return valid buffer', async () => {
     const buffer = fs.readFileSync(path.join(imageDir, 'waves.webp'))
     const plugin = webpcon({ quality: 75 })
-    const result = await plugin(buffer)
+    const result = await measureTest('webpcon › should process WebP and return valid buffer', buffer, () =>
+      plugin(buffer),
+    )
     expect(result).toBeInstanceOf(Buffer)
     expect(result.length).toBeGreaterThan(0)
+  })
+
+  afterAll(() => {
+    logSuiteSummary('webpcon')
   })
 })
