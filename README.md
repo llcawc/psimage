@@ -1,8 +1,9 @@
 # psimage
 
-[![npm version](https://img.shields.io/npm/v/psimage?style=flat-square)](https://www.npmjs.com/package/psimage)
+[![npm version](https://img.shields.io/npm/v/psimage?style=flat&logo=npm)](https://www.npmjs.com/package/psimage)
 [![license](https://img.shields.io/npm/l/psimage?style=flat-square)](https://github.com/llcawc/psimage/blob/main/LICENSE)
-[![node version](https://img.shields.io/node/v/psimage?style=flat-square)](https://nodejs.org)
+[![node version](https://img.shields.io/node/v/psimage?style=flat&logo=node.js)](https://nodejs.org)
+[![Downloads](https://img.shields.io/npm/dm/psimage.svg?style=flat&logo=npm)](https://www.npmjs.com/package/psimage)
 [![tests](https://img.shields.io/badge/tests-63%20passed-brightgreen?style=flat-square)](https://github.com/llcawc/psimage/actions)
 
 > A high‑performance Gulp plugin for optimizing JPG, PNG, GIF, SVG images and converting them to modern WebP & AVIF formats. Built on **imagemin** and **sharp** – delivers maximum compression with minimal configuration.
