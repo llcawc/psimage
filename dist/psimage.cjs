@@ -27,8 +27,8 @@ let chalk = require("chalk");
 chalk = __toESM(chalk, 1);
 let fancy_log = require("fancy-log");
 fancy_log = __toESM(fancy_log, 1);
-let imagemin = require("imagemin");
-imagemin = __toESM(imagemin, 1);
+let imagemin_neo = require("imagemin-neo");
+imagemin_neo = __toESM(imagemin_neo, 1);
 let plugin_error = require("plugin-error");
 plugin_error = __toESM(plugin_error, 1);
 let plur = require("plur");
@@ -449,7 +449,7 @@ function psimage(options = {}) {
 	*/
 	async function transform(file, plugins) {
 		const content = file.contents;
-		const data = await imagemin.default.buffer(content, { plugins });
+		const data = await imagemin_neo.default.buffer(content, { plugins });
 		file.contents = node_buffer.Buffer.from(data);
 		return Number(data.length);
 	}

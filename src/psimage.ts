@@ -5,7 +5,7 @@ import { Transform } from 'node:stream'
 
 import chalk from 'chalk'
 import log from 'fancy-log'
-import imagemin, { type Plugin } from 'imagemin'
+import imagemin, { type Plugin } from 'imagemin-neo'
 import PluginError from 'plugin-error'
 import plur from 'plur'
 import prettyBytes from 'pretty-bytes'

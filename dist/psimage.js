@@ -2,7 +2,7 @@ import { Buffer as Buffer$1 } from "node:buffer";
 import { Transform } from "node:stream";
 import chalk from "chalk";
 import log from "fancy-log";
-import imagemin from "imagemin";
+import imagemin from "imagemin-neo";
 import PluginError from "plugin-error";
 import plur from "plur";
 import prettyBytes from "pretty-bytes";
